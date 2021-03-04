@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>joy</title>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/joy.js') }}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+    <style>
+#joystick {
+    border: 1px solid #FF0000;
+    margin-right:auto;
+    margin-left:auto;
+}
+#joy1Div {
+    margin: 50px;
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -250px;
+    margin-top: -250px;
+}
+.id1 {
+    text-align: center;
+    color: #0c0;
+    font-size: 24px;
+}
+.id2 {
+    text-align: center;
+    color: #c00;
+    font-size: 24px;
+}
+		</style>
+</head>
+<body>
+    <div id="joy1Div"></div>
+    <h1 class="id2" name="id">Disconnected</h1>
+    <script type="text/javascript">
+        var Joy1 = new JoyStick('joy1Div');
+        socket = io.connect('45.144.65.241:5000');
+        var id = document.getElementsByName("id")[0];
+        setInterval(function(){
+            socket.send(Joy1.GetDir())
+        }, 50);
+        socket.on('message', function(msg) {
+            console.log(msg);
+            if (msg == "1") {
+                id.className = "id1";
+                id.innerHTML = "Connected"
+            }
+            else {
+                id.className = "id2";
+                id.innerHTML = "Disconnected"
+            }
+        });
+	
+    </script>
+</body>
+</html>
